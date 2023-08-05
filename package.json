@@ -1,0 +1,14 @@
+{
+  "name": "wallet",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "borys-malinowski <bmalinowski.cisco2017@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tailwindcss -i ./style/main.scss -o ./style/main.css"
+  },
+  "dependencies": {
+    "preline": "^1.9.0",
+    "tailwindcss": "^3.3.3"
+  }
+}
