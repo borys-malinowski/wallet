@@ -14,7 +14,7 @@ pub fn App(cx: Scope) -> impl IntoView {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
         <Stylesheet id="leptos" href="/pkg/wallet.css"/>
-        <Script src="./node_modules/preline/dist/preline.js" />
+        <Script src="./preline/preline.js" />
 
         // sets the document title
         <Title text="Welcome to Leptos"/>
@@ -63,10 +63,10 @@ fn HomePage(cx: Scope) -> impl IntoView {
         set_multiply_score(quantity.get() * value.get());
     });
     view! { cx,
-        <button on:click=move |_| {
+        <button class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md bg-blue-100 border border-transparent font-semibold text-blue-500 hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 ring-offset-white focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm" on:click=move |_| {
             spawn_local(async move {
                 let text = rates().await.unwrap();
-                let text = text.replace(",", ".");
+                let text = text.replace(',', ".");
                 let value = text.parse::<f32>();
             match value {
                 Ok(value) => set_value(value),
@@ -77,7 +77,7 @@ fn HomePage(cx: Scope) -> impl IntoView {
             "Check rate"
             {value}
         </button>
-        <input id="quantity" min="0" type="number" placeholder="Paste here your quantity of shares" on:input=move |event| {
+        <input class="py-3 px-5 block w-full border-gray-200 rounded-full text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400" id="quantity" min="0" type="number" placeholder="Paste here your quantity of shares" on:input=move |event| {
             let value = event_target_value(&event);
             let value = value.parse::<f32>();
             match value {

@@ -14,3 +14,4 @@ end2end/playwright-report/
 playwright/.cache/
 yarn-error.log
 style/
+public/preline/
