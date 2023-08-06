@@ -1,4 +1,7 @@
-use crate::error_template::{AppError, ErrorTemplate};
+use crate::{
+    api::rates::rates,
+    error_template::{AppError, ErrorTemplate},
+};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
@@ -37,23 +40,6 @@ pub fn App(cx: Scope) -> impl IntoView {
     }
 }
 
-#[server(Rates, "/api")]
-pub async fn rates() -> Result<String, ServerFnError> {
-    use fantoccini::{ClientBuilder, Locator};
-    let connection = ClientBuilder::native()
-        .connect("http://localhost:4444")
-        .await
-        .expect("failed to connect to WebDriver");
-    connection
-        .goto("https://www.gpw.pl/spolka?isin=PLDINPL00011")
-        .await?;
-    let text = connection
-        .find(Locator::Css(".summary"))
-        .await?
-        .text()
-        .await?;
-    Ok(text)
-}
 #[component]
 fn HomePage(cx: Scope) -> impl IntoView {
     let (value, set_value) = create_signal(cx, 0 as f32);

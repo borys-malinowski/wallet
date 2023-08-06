@@ -15,3 +15,4 @@ playwright/.cache/
 yarn-error.log
 style/
 public/preline/
+.env
