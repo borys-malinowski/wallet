@@ -14,6 +14,7 @@ pub fn App(cx: Scope) -> impl IntoView {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
         <Stylesheet id="leptos" href="/pkg/wallet.css"/>
+        <Script src="./node_modules/preline/dist/preline.js" />
 
         // sets the document title
         <Title text="Welcome to Leptos"/>
