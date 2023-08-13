@@ -3,44 +3,46 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Share {
-    amount: f64,
+    amount: f32,
     buying_price: Option<usize>,
-    company_id: String,
+    isin: String,
 }
 
 impl Share {
-    fn new(amount: f64, company_id: String, buying_price: Option<usize>) -> Self {
+    fn new(amount: f32, isin: String, buying_price: Option<usize>) -> Self {
         Share {
             amount,
-            company_id,
+            isin,
             buying_price,
         }
     }
 }
 
 #[server(Rates, "/api")]
-pub async fn rates(amount: f64) -> Result<String, ServerFnError> {
+pub async fn rates(isin: String) -> Result<String, ServerFnError> {
     use fantoccini::{ClientBuilder, Locator};
-    use mongodb::{options::ClientOptions, Client};
-    let mut options = ClientOptions::parse(dotenv!("MONGODB_CONNECTION")).await?;
-    options.app_name = Some("wallet".to_string());
-    let client = Client::with_options(options)?;
-    let database = client.database("wallet");
+    // use sea_orm::{Database, DatabaseConnection};
+    // let db: DatabaseConnection = Database::connect(dotenv!("POSTGRES_CONNECTION")).await?;
+    // use mongodb::{options::ClientOptions, Client};
+    // let mut options = ClientOptions::parse(dotenv!("MONGODB_CONNECTION")).await?;
+    // options.app_name = Some("wallet".to_string());
+    // let clientMongo = Client::with_options(options)?;
+    // let database = client.database("wallet");
     let connection = ClientBuilder::native()
         .connect("http://localhost:4444")
         .await
         .expect("failed to connect to WebDriver");
     connection
-        .goto("https://www.gpw.pl/spolka?isin=PLDINPL00011")
+        .goto(&format!("https://www.gpw.pl/spolka?isin={isin}"))
         .await?;
     let text = connection
         .find(Locator::Css(".summary"))
         .await?
         .text()
         .await?;
-    let collection = database.collection::<Share>("shares");
-    collection
-        .insert_one(Share::new(amount, "PLDINPL00011".to_string(), None), None)
-        .await?;
+    // let collection = database.collection::<Share>("shares");
+    // collection
+    //     .insert_one(Share::new(amount, "PLDINPL00011".to_string(), None), None)
+    //     .await?;
     Ok(text)
 }
