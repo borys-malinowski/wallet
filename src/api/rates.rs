@@ -1,6 +1,9 @@
 use leptos::*;
 use serde::{Deserialize, Serialize};
 
+const DATABASE_URL: &str = "mysql://root:password@localhost:3306";
+const DB_NAME: &str = "bakeries_db";
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Share {
     amount: f32,
@@ -21,6 +24,7 @@ impl Share {
 #[server(Rates, "/api")]
 pub async fn rates(isin: String) -> Result<String, ServerFnError> {
     use fantoccini::{ClientBuilder, Locator};
+    use prisma_client_rust::NewClientError;
     // use sea_orm::{Database, DatabaseConnection};
     // let db: DatabaseConnection = Database::connect(dotenv!("POSTGRES_CONNECTION")).await?;
     // use mongodb::{options::ClientOptions, Client};
@@ -40,6 +44,7 @@ pub async fn rates(isin: String) -> Result<String, ServerFnError> {
         .await?
         .text()
         .await?;
+    let client: Result<PrismaClient, NewClientError> = PrismaClient::_builder().build().await;
     // let collection = database.collection::<Share>("shares");
     // collection
     //     .insert_one(Share::new(amount, "PLDINPL00011".to_string(), None), None)
