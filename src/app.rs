@@ -52,7 +52,7 @@ fn HomePage(cx: Scope) -> impl IntoView {
     view! { cx,
         <button class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md bg-blue-100 border border-transparent font-semibold text-blue-500 hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 ring-offset-white focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm" on:click=move |_| {
             spawn_local(async move {
-                let text = rates(isin.get()).await.unwrap();
+                let text = rates(isin.get(), quantity.get()).await.unwrap();
                 let text = text.replace(',', ".");
                 let value = text.parse::<f32>();
                 match value {

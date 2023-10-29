@@ -5,7 +5,10 @@
   "author": "borys-malinowski <bmalinowski.cisco2017@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tailwindcss -i ./rawStyles/main.scss -o ./style/main.css"
+    "generate-types": "cargo prisma generate",
+    "migrate": "cargo prisma db push --force-reset",
+    "build": "tailwindcss -i ./rawStyles/main.scss -o ./style/main.css",
+    "lint": "cargo clippy --fix"
   },
   "dependencies": {
     "@types/node": "^20.4.8",

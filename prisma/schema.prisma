@@ -1,6 +1,6 @@
 datasource db {
-    provider = "sqlite"
-    url      = env("CONNECTION")
+    provider = "postgresql"
+    url      = env("POSTGRES_CONNECTION")
 }
 
 generator client {
@@ -9,6 +9,18 @@ generator client {
 }
 
 model User {
-    id          String @id
-    displayName String
+    id           Int                 @id @default(autoincrement())
+    displayName  String
+    transactions MarketTransaction[]
+}
+
+model MarketTransaction {
+    id              Int      @id @default(autoincrement())
+    isin            String   @unique
+    shareName       String
+    transactionDate DateTime @default(now()) @db.Timestamptz(1)
+    quantity        Float
+    buyPrice        Float
+    User            User?    @relation(fields: [userId], references: [id])
+    userId          Int?
 }

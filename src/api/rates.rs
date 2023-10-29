@@ -22,7 +22,7 @@ impl Share {
 }
 
 #[server(Rates, "/api")]
-pub async fn rates(isin: String) -> Result<String, ServerFnError> {
+pub async fn rates(isin: String, quantity: f32) -> Result<String, ServerFnError> {
     use fantoccini::{ClientBuilder, Locator};
     use prisma_cli::prisma::PrismaClient;
     // use sea_orm::{Database, DatabaseConnection};
@@ -45,6 +45,17 @@ pub async fn rates(isin: String) -> Result<String, ServerFnError> {
         .text()
         .await?;
     let client = PrismaClient::_builder().build().await?;
+    client
+        .market_transaction()
+        .create(
+            isin,
+            String::from("share_name"),
+            quantity.into(),
+            2137.0,
+            vec![],
+        )
+        .exec()
+        .await?;
     // let collection = database.collection::<Share>("shares")
     // collection
     //     .insert_one(Share::new(amount, "PLDINPL00011".to_string(), None), None)
