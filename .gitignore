@@ -16,3 +16,4 @@ yarn-error.log
 style/
 public/preline/
 .env
+prisma-cli/src/prisma.rs

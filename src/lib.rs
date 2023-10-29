@@ -4,9 +4,6 @@ pub mod app;
 pub mod error_template;
 pub mod fileserv;
 
-#[allow(warnings, unused)]
-pub mod prisma;
-
 #[macro_use]
 extern crate dotenv_codegen;
 

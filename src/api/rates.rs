@@ -24,7 +24,7 @@ impl Share {
 #[server(Rates, "/api")]
 pub async fn rates(isin: String) -> Result<String, ServerFnError> {
     use fantoccini::{ClientBuilder, Locator};
-    use prisma_client_rust::NewClientError;
+    use prisma_cli::prisma::PrismaClient;
     // use sea_orm::{Database, DatabaseConnection};
     // let db: DatabaseConnection = Database::connect(dotenv!("POSTGRES_CONNECTION")).await?;
     // use mongodb::{options::ClientOptions, Client};
@@ -44,8 +44,8 @@ pub async fn rates(isin: String) -> Result<String, ServerFnError> {
         .await?
         .text()
         .await?;
-    let client: Result<PrismaClient, NewClientError> = PrismaClient::_builder().build().await;
-    // let collection = database.collection::<Share>("shares");
+    let client = PrismaClient::_builder().build().await?;
+    // let collection = database.collection::<Share>("shares")
     // collection
     //     .insert_one(Share::new(amount, "PLDINPL00011".to_string(), None), None)
     //     .await?;
