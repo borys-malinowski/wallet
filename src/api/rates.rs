@@ -1,9 +1,6 @@
 use leptos::*;
 use serde::{Deserialize, Serialize};
 
-const DATABASE_URL: &str = "mysql://root:password@localhost:3306";
-const DB_NAME: &str = "bakeries_db";
-
 #[derive(Debug, Serialize, Deserialize, Clone)]
 struct Share {
     amount: f32,
@@ -25,13 +22,6 @@ impl Share {
 pub async fn rates(isin: String, quantity: f32) -> Result<String, ServerFnError> {
     use fantoccini::{ClientBuilder, Locator};
     use prisma_cli::prisma::PrismaClient;
-    // use sea_orm::{Database, DatabaseConnection};
-    // let db: DatabaseConnection = Database::connect(dotenv!("POSTGRES_CONNECTION")).await?;
-    // use mongodb::{options::ClientOptions, Client};
-    // let mut options = ClientOptions::parse(dotenv!("MONGODB_CONNECTION")).await?;
-    // options.app_name = Some("wallet".to_string());
-    // let clientMongo = Client::with_options(options)?;
-    // let database = client.database("wallet");
     let connection = ClientBuilder::native()
         .connect("http://localhost:4444")
         .await
@@ -56,9 +46,7 @@ pub async fn rates(isin: String, quantity: f32) -> Result<String, ServerFnError>
         )
         .exec()
         .await?;
-    // let collection = database.collection::<Share>("shares")
-    // collection
-    //     .insert_one(Share::new(amount, "PLDINPL00011".to_string(), None), None)
-    //     .await?;
+    // let trasactionss = client.market_transaction().find_many(vec![]).exec().await?;
+    // println!("{:#?}", trasactionss);
     Ok(text)
 }
