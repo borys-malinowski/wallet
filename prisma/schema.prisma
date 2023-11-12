@@ -10,7 +10,7 @@ generator client {
 
 model User {
     id           Int                 @id @default(autoincrement())
-    displayName  String
+    username     String
     transactions MarketTransaction[]
 }
 

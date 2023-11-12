@@ -1,22 +1,4 @@
 use leptos::*;
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-struct Share {
-    amount: f32,
-    buying_price: Option<usize>,
-    isin: String,
-}
-
-impl Share {
-    fn new(amount: f32, isin: String, buying_price: Option<usize>) -> Self {
-        Share {
-            amount,
-            isin,
-            buying_price,
-        }
-    }
-}
 
 #[server(Rates, "/api")]
 pub async fn rates(isin: String, quantity: f32) -> Result<String, ServerFnError> {
@@ -50,3 +32,7 @@ pub async fn rates(isin: String, quantity: f32) -> Result<String, ServerFnError>
     // println!("{:#?}", trasactionss);
     Ok(text)
 }
+
+
+
+

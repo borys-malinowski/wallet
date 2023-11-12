@@ -1,5 +1,10 @@
 {
   "rust-analyzer.cargo.features": ["ssr"],
+  "rust-analyzer.rustfmt.overrideCommand": [
+    "leptosfmt",
+    "--stdin",
+    "--rustfmt"
+  ],
   "emmet.includeLanguages": {
     "rust": "html",
     "*.rs": "html"

@@ -1,8 +1,8 @@
 use cfg_if::cfg_if;
-pub mod api;
 pub mod app;
 pub mod error_template;
 pub mod fileserv;
+pub mod server;
 
 #[macro_use]
 extern crate dotenv_codegen;
@@ -23,3 +23,4 @@ cfg_if! { if #[cfg(feature = "hydrate")] {
         });
     }
 }}
+
