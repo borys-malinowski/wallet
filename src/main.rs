@@ -34,12 +34,13 @@ cfg_if! { if #[cfg(feature = "ssr")] {
         handler(req).await.into_response()
     }
 
-    #[tokio::main]
-    async fn main() {
+
+}}
+
+#[cfg(feature = "ssr")]
+#[tokio::main]
+async fn main() {
     simple_logger::init_with_level(log::Level::Debug).expect("couldn't initialize logging");
-
-
-
     // Setting get_configuration(None) means we'll be using cargo-leptos's env values
     // For deployment these variables are:
     // <https://github.com/leptos-rs/start-axum#executing-a-server-on-a-remote-machine-without-the-toolchain>
@@ -69,7 +70,6 @@ cfg_if! { if #[cfg(feature = "ssr")] {
         .await
         .unwrap();
 }
-}}
 
 #[cfg(feature = "ssr")]
 #[cfg(not(feature = "ssr"))]
@@ -78,4 +78,9 @@ pub fn main() {
     // unless we want this to work with e.g., Trunk for a purely client-side app
     // see lib.rs for hydration function instead
 }
+
+
+
+
+
 
