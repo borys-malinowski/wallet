@@ -7,7 +7,7 @@ cfg_if! { if #[cfg(feature = "ssr")] {
         app::*, 
         server::{
             types::app_state::AppState,
-            clients::postgre_sql_client::{init_prisma_client},
+            clients::postgre_sql_client::{init_postgre_sql_client},
         },
         fileserv::file_and_error_handler,
     };
@@ -46,7 +46,7 @@ async fn main() {
     let leptos_options = configuration.leptos_options;
     let site_addr = leptos_options.site_addr;
     let routes = generate_route_list(|cx| view! { cx, <App/> }).await;
-    let postgre_sql_client = init_prisma_client().await;
+    let postgre_sql_client = init_postgre_sql_client().await;
     let app_state = AppState {
         leptos_options,
         postgre_sql_client: postgre_sql_client.clone()
@@ -66,4 +66,6 @@ async fn main() {
 #[cfg(feature = "ssr")]
 #[cfg(not(feature = "ssr"))]
 pub fn main() {}
+
+
 
