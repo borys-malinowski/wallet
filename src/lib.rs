@@ -2,6 +2,7 @@ use cfg_if::cfg_if;
 pub mod app;
 pub mod error_template;
 pub mod fileserv;
+pub mod pages;
 pub mod server;
 
 #[macro_use]
