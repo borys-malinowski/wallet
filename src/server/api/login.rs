@@ -8,12 +8,22 @@ struct AccessToken {
 }
 
 #[server(Login, "/api")]
-pub async fn login(context: Scope, form_username: String, password: String) -> Result< String, ServerFnError> {
+pub async fn login(context: Scope, form_username: String, form_password: String) -> Result< String, ServerFnError> {
   use crate::server::clients::postgre_sql_client::use_postgre_sql_client;
   use prisma_cli::prisma::user::username;
+  use bcrypt::{verify};
   let client = use_postgre_sql_client(context)?;
   let username = form_username.to_string();
-  client.user().find_unique(username::equals(username.clone())).exec().await?;
+  let password = form_password.to_string();
+  let db_user = client.user().find_unique(username::equals(username.clone())).exec().await?;
+  match db_user {
+    Some(db_user)=>{
+      let xd = verify(password.clone(), &db_user.password);
+      match xd {Ok(v)=>{println!("working with version: {v:?}")}
+    Err(_) => todo!(), }
+    }
+    None => todo!(), 
+  }
   use jsonwebtoken::{encode, Header, Algorithm, EncodingKey};
   use chrono::{Utc, Duration};
   let access_expiration = Utc::now()
@@ -49,6 +59,23 @@ pub async fn login(context: Scope, form_username: String, password: String) -> R
   response.insert_header(SET_COOKIE, HeaderValue::from_str(&cookie.to_string())?);
   Ok(access_token)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
