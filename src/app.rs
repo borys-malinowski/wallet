@@ -1,6 +1,6 @@
 use crate::{
+    components::{home_page::HomePage, login_page::LoginPage, shares::Shares},
     error_template::{AppError, ErrorTemplate},
-    pages::{home_page::HomePage, login_page::LoginPage, shares::Shares},
 };
 use leptos::*;
 use leptos_meta::*;
