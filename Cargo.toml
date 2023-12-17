@@ -32,6 +32,8 @@ dotenv_codegen = "0.15.0"
 prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.9", optional = true}
 prisma-cli = { path = "./prisma-cli", optional = true }
 jsonwebtoken = { version = "9.1.0", optional = true }
+chrono = {version = "0.4.31", optional = true}
+cookie = {version ="0.18.0", optional = true}
 
 [workspace]
 members = [
@@ -55,7 +57,9 @@ ssr = [
     "dep:dotenv",
     "dep:prisma-client-rust",
     "dep:prisma-cli",
-    "dep:jsonwebtoken"
+    "dep:jsonwebtoken",
+    "dep:chrono",
+    "dep:cookie"
 ]
 
 [profile.wasm-release]

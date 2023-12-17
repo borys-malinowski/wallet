@@ -28,10 +28,9 @@ pub fn LoginPage(context: Scope) -> impl IntoView {
           }
         />
 
-        <button
-          type="submit"
+        <div
           class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md bg-blue-100 border border-transparent font-semibold text-blue-500 hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 ring-offset-white focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
-          on:submit=move |_| {
+          on:click=move |_| {
               spawn_local(async move {
                   let username = username.get();
                   let password = password.get();
@@ -41,7 +40,7 @@ pub fn LoginPage(context: Scope) -> impl IntoView {
         >
 
           Login
-        </button>
+        </div>
       </form>
     }
 }
