@@ -34,7 +34,7 @@ prisma-cli = { path = "./prisma-cli", optional = true }
 jsonwebtoken = { version = "9.1.0", optional = true }
 chrono = {version = "0.4.31", optional = true}
 cookie = {version ="0.18.0", optional = true}
-bcrypt = {version ="0.15.0", optional = true}
+argon2 = {version = "0.5.2", optional = true}
 
 [workspace]
 members = [
@@ -61,7 +61,7 @@ ssr = [
     "dep:jsonwebtoken",
     "dep:chrono",
     "dep:cookie",
-    "dep:bcrypt"
+    "dep:argon2"
 ]
 
 [profile.wasm-release]

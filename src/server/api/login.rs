@@ -8,21 +8,27 @@ struct AccessToken {
 }
 
 #[server(Login, "/api")]
-pub async fn login(context: Scope, form_username: String, form_password: String) -> Result< String, ServerFnError> {
+pub async fn login(context: Scope, form_username: String, form_password: String) -> Result<String, ServerFnError> {
   use crate::server::clients::postgre_sql_client::use_postgre_sql_client;
   use prisma_cli::prisma::user::username;
-  use bcrypt::{verify};
+  use argon2::{ Argon2, PasswordHash, PasswordVerifier};
   let client = use_postgre_sql_client(context)?;
   let username = form_username.to_string();
-  let password = form_password.to_string();
   let db_user = client.user().find_unique(username::equals(username.clone())).exec().await?;
-  match db_user {
-    Some(db_user)=>{
-      let xd = verify(password.clone(), &db_user.password);
-      match xd {Ok(v)=>{println!("working with version: {v:?}")}
-    Err(_) => todo!(), }
-    }
-    None => todo!(), 
+  if db_user.is_none() {
+    return Err(ServerFnError::ServerError(
+      String::from("bad request")
+    ));
+  } 
+  let db_user = db_user.unwrap();
+  let parsed_hash = PasswordHash::new(&db_user.password).unwrap();
+  let is_valid = Argon2::default()
+        .verify_password(form_password.as_bytes(), &parsed_hash)
+        .map_or(false, |_| true);
+  if !is_valid {
+    return Err(ServerFnError::ServerError(
+      String::from("forbidden password")
+    ));
   }
   use jsonwebtoken::{encode, Header, Algorithm, EncodingKey};
   use chrono::{Utc, Duration};
@@ -59,6 +65,126 @@ pub async fn login(context: Scope, form_username: String, form_password: String)
   response.insert_header(SET_COOKIE, HeaderValue::from_str(&cookie.to_string())?);
   Ok(access_token)
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
