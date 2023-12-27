@@ -8,7 +8,7 @@ struct AccessToken {
 }
 
 #[server(Login, "/api")]
-pub async fn login(context: Scope, form_username: String, form_password: String) -> Result<String, ServerFnError> {
+pub async fn login(context: Scope, form_username: String, form_password: String) -> Result<bool, ServerFnError> {
   use crate::server::clients::postgre_sql_client::use_postgre_sql_client;
   use prisma_cli::prisma::user::username;
   use argon2::{ Argon2, PasswordHash, PasswordVerifier};
@@ -50,7 +50,7 @@ pub async fn login(context: Scope, form_username: String, form_password: String)
     exp: refresh_expiration as usize,
   };
   let header = Header::new(Algorithm::HS512);
-  let access_token = encode(&header, &access_body, &EncodingKey::from_secret(dotenv!("ACCESS_TOKEN_SECRET").as_bytes()))?;
+  encode(&header, &access_body, &EncodingKey::from_secret(dotenv!("ACCESS_TOKEN_SECRET").as_bytes()))?;
   let refresh_token = encode(&header, &refresh_body, &EncodingKey::from_secret(dotenv!("REFRESH_TOKEN_SECRET").as_bytes()))?;
   use cookie::{Cookie, time::Duration as CookieDuration, SameSite};
   let cookie = Cookie::build(("refresh-token", refresh_token))
@@ -63,8 +63,13 @@ pub async fn login(context: Scope, form_username: String, form_password: String)
   use axum::http::header::{SET_COOKIE,HeaderValue};
   let response = expect_context::<ResponseOptions>(context);
   response.insert_header(SET_COOKIE, HeaderValue::from_str(&cookie.to_string())?);
-  Ok(access_token)
+  Ok(is_valid)
 }
+
+
+
+
+
 
 
 

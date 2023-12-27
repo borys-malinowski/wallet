@@ -5,6 +5,7 @@ use leptos::*;
 pub fn LoginPage(context: Scope) -> impl IntoView {
     let (username, set_username) = create_signal(context, String::new());
     let (password, set_password) = create_signal(context, String::new());
+    let (authorization, set_authorization) = create_signal(context, false);
     view! { context,
       <form>
         <input
@@ -34,13 +35,15 @@ pub fn LoginPage(context: Scope) -> impl IntoView {
               spawn_local(async move {
                   let username = username.get();
                   let password = password.get();
-                  login(context, username, password).await.unwrap();
+                  let value = login(context, username, password).await.unwrap();
+                  set_authorization(value)
               });
           }
         >
 
           Login
         </div>
+        <div>{authorization}</div>
       </form>
     }
 }
