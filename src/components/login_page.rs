@@ -6,6 +6,14 @@ pub fn LoginPage(context: Scope) -> impl IntoView {
     let (username, set_username) = create_signal(context, String::new());
     let (password, set_password) = create_signal(context, String::new());
     let (authorization, set_authorization) = create_signal(context, false);
+    create_effect(context, move |_| {
+        if authorization.get() {
+            let navigate = leptos_router::use_navigate(context);
+            request_animation_frame(move || {
+                _ = navigate("/shares", Default::default());
+            });
+        }
+    });
     view! { context,
       <form>
         <input
@@ -35,15 +43,16 @@ pub fn LoginPage(context: Scope) -> impl IntoView {
               spawn_local(async move {
                   let username = username.get();
                   let password = password.get();
-                  let value = login(context, username, password).await.unwrap();
-                  set_authorization(value)
+                  let result = login(context, username, password).await;
+                  if result.is_ok() {
+                      set_authorization.set(true);
+                  }
               });
           }
         >
 
           Login
         </div>
-        <div>{authorization}</div>
       </form>
     }
 }
