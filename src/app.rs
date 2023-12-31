@@ -1,5 +1,7 @@
 use crate::{
-    components::{home_page::HomePage, login_page::LoginPage, shares::Shares},
+    components::{
+        home_page::HomePage, login_page::LoginPage, register_page::RegisterPage, shares::Shares,
+    },
     error_template::{AppError, ErrorTemplate},
 };
 use leptos::*;
@@ -37,6 +39,13 @@ pub fn App(context: Scope) -> impl IntoView {
               path="/shares"
               view=|context| {
                   view! { context, <Shares/> }
+              }
+            />
+
+            <Route
+              path="/register"
+              view=|context| {
+                  view! { context, <RegisterPage/> }
               }
             />
 

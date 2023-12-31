@@ -1,19 +1,11 @@
-use crate::server::api::login::login;
+use crate::server::api::register::register;
 use leptos::*;
 
 #[component]
-pub fn LoginPage(context: Scope) -> impl IntoView {
+pub fn RegisterPage(context: Scope) -> impl IntoView {
     let (username, set_username) = create_signal(context, String::new());
     let (password, set_password) = create_signal(context, String::new());
-    let (authorization, set_authorization) = create_signal(context, false);
-    create_effect(context, move |_| {
-        if authorization.get() {
-            let navigate = leptos_router::use_navigate(context);
-            request_animation_frame(move || {
-                _ = navigate("/shares", Default::default());
-            });
-        }
-    });
+
     view! { context,
       <form>
         <input
@@ -43,24 +35,7 @@ pub fn LoginPage(context: Scope) -> impl IntoView {
               spawn_local(async move {
                   let username = username.get();
                   let password = password.get();
-                  let result = login(context, username, password).await;
-                  if result.is_ok() {
-                      set_authorization.set(true);
-                  }
-              });
-          }
-        >
-
-          Login
-        </div>
-        <div
-          class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md bg-blue-100 border border-transparent font-semibold text-blue-500 hover:text-white hover:bg-blue-500 focus:outline-none focus:ring-2 ring-offset-white focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
-          on:click=move |_| {
-              spawn_local(async move {
-                  let navigate = leptos_router::use_navigate(context);
-                  request_animation_frame(move || {
-                      _ = navigate("/register", Default::default());
-                  });
+                  let _ = register(context, username, password).await;
               });
           }
         >
