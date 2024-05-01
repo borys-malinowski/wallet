@@ -7,6 +7,9 @@ pub fn RegisterPage(context: Scope) -> impl IntoView {
     let (password, set_password) = create_signal(context, String::new());
 
     view! { context,
+      <div>
+        <span>REGISTER PAGE</span>
+      </div>
       <form>
         <input
           class="py-3 px-5 block w-full border-gray-200 rounded-full text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"

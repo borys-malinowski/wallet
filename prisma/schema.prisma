@@ -11,17 +11,18 @@ generator client {
 model User {
     id           Int                 @id @default(autoincrement())
     username     String              @unique
-    password     String              @unique
+    password     String
     transactions MarketTransaction[]
 }
 
 model MarketTransaction {
     id              Int      @id @default(autoincrement())
-    isin            String   @unique
+    isin            String
     shareName       String
     transactionDate DateTime @default(now()) @db.Timestamptz(1)
     quantity        Float
     buyPrice        Float
+    value           Float
     User            User?    @relation(fields: [userId], references: [id])
     userId          Int?
 }

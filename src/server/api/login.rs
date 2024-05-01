@@ -1,19 +1,20 @@
 use leptos::*;
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct AccessToken {
     username: String,
     exp: usize,
 }
 
 #[server(Login, "/api")]
-pub async fn login(context: Scope, form_username: String, form_password: String) -> Result<(), ServerFnError> {
+pub async fn login(context: Scope, form_username: String, form_password: String) -> Result<String, ServerFnError> {
   use crate::server::clients::postgre_sql_client::use_postgre_sql_client;
   use prisma_cli::prisma::user::username;
   use argon2::{ Argon2, PasswordHash, PasswordVerifier};
   let client = use_postgre_sql_client(context)?;
   let username = form_username.to_string();
+  let cloned_username = username.clone();
   let db_user = client.user().find_unique(username::equals(username.clone())).exec().await?;
   if db_user.is_none() {
     return Err(ServerFnError::ServerError(
@@ -63,5 +64,6 @@ pub async fn login(context: Scope, form_username: String, form_password: String)
   use axum::http::header::{SET_COOKIE,HeaderValue};
   let response = expect_context::<ResponseOptions>(context);
   response.insert_header(SET_COOKIE, HeaderValue::from_str(&cookie.to_string())?);
-  Ok(())
+  Ok(cloned_username)
 }
+

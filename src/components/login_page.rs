@@ -5,6 +5,8 @@ use leptos::*;
 pub fn LoginPage(context: Scope) -> impl IntoView {
     let (username, set_username) = create_signal(context, String::new());
     let (password, set_password) = create_signal(context, String::new());
+    let (user, set_user) = create_signal(context, String::new());
+    provide_context(context, user);
     let (authorization, set_authorization) = create_signal(context, false);
     create_effect(context, move |_| {
         if authorization.get() {
@@ -15,6 +17,12 @@ pub fn LoginPage(context: Scope) -> impl IntoView {
         }
     });
     view! { context,
+      <div>
+        <span>LOGIN PAGE</span>
+      </div>
+      <div>
+        <span>LOGGED as {user}</span>
+      </div>
       <form>
         <input
           class="py-3 px-5 block w-full border-gray-200 rounded-full text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
@@ -45,6 +53,7 @@ pub fn LoginPage(context: Scope) -> impl IntoView {
                   let password = password.get();
                   let result = login(context, username, password).await;
                   if result.is_ok() {
+                      set_user(result.clone().unwrap());
                       set_authorization.set(true);
                   }
               });
